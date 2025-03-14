@@ -1,4 +1,4 @@
-package kusi.paska.ohii_harjoitustyo;
+package com.github.LillaNudde;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
