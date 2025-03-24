@@ -11,8 +11,16 @@ public class Measurement
     private double width;
     private double thickness;
 
+    // toString
+    @Override
+    public String toString()
+    {
+        return (ID + " | " + date + " | (" + length + "cm x " + width + "mm x " + thickness + "mm)" + " | Defects: " + getDefectAmount());
+    }
+
     // List for defects
     private ArrayList<Defect> DefectList = new ArrayList<Defect>();
+
 
     // Getters for fields
     public int getID()
@@ -182,6 +190,12 @@ public class Measurement
         }
         return defectLength;
     }
+
+    public void addDefects(ArrayList<Defect> defects)
+    {
+        DefectList.addAll(defects);
+    }
+
 
     // Remove defect from list by index
     public void removeDefect(int index)
