@@ -1,6 +1,7 @@
 package com.github.LillaNudde;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Measurement
 {
@@ -15,7 +16,9 @@ public class Measurement
     @Override
     public String toString()
     {
-        return (ID + " | " + date + " | (" + length + "cm x " + width + "mm x " + thickness + "mm)" + " | Defects: " + getDefectAmount());
+        return (ID + " | " + date +
+                " | (" + length + "cm x " + width + "mm x " + thickness + "mm)" +
+                " | Defects: " + getDefectAmount());
     }
 
     // List for defects
@@ -76,6 +79,11 @@ public class Measurement
     public void addDefect(double X1, double X2, String defectType)
     {
         DefectList.add(new Defect(X1, X2, defectType));
+    }
+
+    public List<Defect> getDefects()
+    {
+        return DefectList;
     }
 
     // Get total amount of defects of a certain type

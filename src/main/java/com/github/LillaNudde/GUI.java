@@ -3,9 +3,7 @@ package com.github.LillaNudde;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -15,8 +13,8 @@ import java.util.List;
 
 public class GUI extends Application
 {
-    ListView<Defect> defectList = new ListView<>();
     ListView<Measurement> measurementList = new ListView<>();
+    ListView<Defect> defectList = new ListView<>();
 
     Button importButton = new Button("Import...");
     Button exportButton = new Button("Export...");
@@ -35,6 +33,19 @@ public class GUI extends Application
     VBox measurementBox = new VBox(measurementButtons, measurementList);
     VBox defectBox = new VBox(defectButtons, defectList);
 
+    private int getNextID()
+    {
+        int nextID = 0;
+        for (Measurement measurement : measurementList.getItems())
+        {
+            if (measurement.getID() > nextID)
+            {
+                nextID = measurement.getID();
+            }
+        }
+        return (nextID + 1);
+    }
+
     public static void main(String[] args)
     {
         launch(args);
@@ -47,6 +58,9 @@ public class GUI extends Application
         BorderPane root = new BorderPane();
         root.setLeft(leftButtonBox);
         leftButtonBox.setAlignment(Pos.CENTER);
+
+        measurementList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        defectList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // Button action to open the file chooser
         importButton.setOnAction(e ->
@@ -69,12 +83,13 @@ public class GUI extends Application
             // RAKENNA TÄÄ ROSKA
         });
 
+
         newMeasurementButton.setOnAction(e ->
         {
             Stage popUp = new Stage();
             popUp.setTitle("New Measurement");
 
-            int newID = measurementList.getItems().size() + 1;
+            int newID = getNextID();
 
             TextField dateField = new TextField();
             dateField.setPromptText("Date (YYYY-MM-DD):");
@@ -113,10 +128,124 @@ public class GUI extends Application
             VBox inputBox = new VBox(10, dateField, lengthField, widthField, thicknessField, saveButton);
             inputBox.setAlignment(Pos.CENTER);
 
-            Scene popUpScene = new Scene(inputBox, 250, 180);
+            Scene popUpScene = new Scene(inputBox, 300, 180);
             popUp.setScene(popUpScene);
             popUp.show();
         });
+
+        deleteMeasurementButton.setOnAction(e ->
+        {
+           List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
+
+           Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+           confirmation.setTitle("Confirm Deletion");
+           confirmation.setHeaderText("Are you sure you want to delete selected measurement(s)?");
+           confirmation.setContentText("Deletion CANNOT be undone.");
+
+           confirmation.showAndWait().ifPresent(response ->
+           {
+               if (response == ButtonType.OK)
+               {
+                   measurementList.getItems().removeAll(selectedMeasurements);
+               }
+               else
+               {
+                   confirmation.close();
+               }
+           });
+        });
+
+        measurementList.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) ->
+        {
+            defectList.getItems().clear();
+
+            List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
+
+            if (selectedMeasurements.isEmpty())
+            {
+                return;
+            }
+            else
+            {
+                defectList.getItems().clear();
+                for (Measurement measurement : selectedMeasurements)
+                {
+                    for (Defect defect : measurement.getDefects())
+                    {
+                        defectList.getItems().add(defect); // Adds defect as a string representation
+                    }
+                }
+            }
+        });
+
+        newDefectButton.setOnAction(e ->
+        {
+           Stage popUp = new Stage();
+           popUp.setTitle("New Defect");
+
+           TextField typeField = new TextField();
+           typeField.setPromptText("Defect Type");
+
+           TextField X1Field = new TextField();
+           X1Field.setPromptText("X1 (cm)");
+
+           TextField X2Field = new TextField();
+           X2Field.setPromptText("X2 (cm)");
+
+           Button saveButton = new Button("Save");
+
+           List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
+           Measurement selectedMeasurement = selectedMeasurements.get(0);
+           if (selectedMeasurements.isEmpty())
+           {
+               Alert alert = new Alert(Alert.AlertType.WARNING);
+               alert.setTitle("No measurement selected");
+               alert.setHeaderText("You must select a measurement first.");
+               alert.setContentText(null);
+               alert.showAndWait();
+               return;
+           }
+           else if (selectedMeasurements.size() > 1)
+           {
+               Alert alert = new Alert(Alert.AlertType.WARNING);
+               alert.setTitle("Multiple measurements selected");
+               alert.setHeaderText("Please select only a single measurement");
+               alert.setContentText(null);
+               alert.showAndWait();
+               return;
+           }
+           else
+           {
+               saveButton.setOnAction(saveEvent ->
+               {
+                   try
+                   {
+                       String type = typeField.getText();
+                       double x1 = Double.parseDouble(X1Field.getText());
+                       double x2 = Double.parseDouble(X2Field.getText());
+
+                       Defect newDefect = new Defect(x1, x2, type);
+                       selectedMeasurement.addDefect(x1, x2, type);
+
+                       defectList.getItems().clear();
+                       defectList.getItems().add(newDefect());
+
+                       popUp.close();
+                   }
+                   catch (NumberFormatException ex)
+                   {
+                       // Tähki joku errorrrerror varmaa
+                   }
+               });
+           }
+           VBox inputBox = new VBox(10, typeField, X1Field, X2Field, saveButton);
+           inputBox.setAlignment(Pos.CENTER);
+           Scene popUpScene = new Scene(inputBox, 300, 180);
+           popUp.setScene(popUpScene);
+           popUp.show();
+        });
+
+
 
         root.setCenter(measurementBox);
         root.setRight(defectBox);

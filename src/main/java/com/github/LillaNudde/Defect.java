@@ -29,6 +29,14 @@ public class Defect
         this.DefectType = DefectType;
     }
 
+    @Override
+    public String toString()
+    {
+        return ("Defect: " + DefectType +
+                " | X1: " + X1 + "cm" +
+                " | X2: " + X2 + "cm");
+    }
+
     // Get length of defect
     public double getDefectLength()
     {
