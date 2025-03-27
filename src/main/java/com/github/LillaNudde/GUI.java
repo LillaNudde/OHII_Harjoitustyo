@@ -81,6 +81,18 @@ public class GUI extends Application
         exportButton.setOnAction(e ->
         {
             // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+            // RAKENNA TÄÄ ROSKA
+
         });
 
 
@@ -139,7 +151,7 @@ public class GUI extends Application
 
            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
            confirmation.setTitle("Confirm Deletion");
-           confirmation.setHeaderText("Are you sure you want to delete selected measurement(s)?");
+           confirmation.setHeaderText("Are you sure you want to delete the selected measurement(s)?");
            confirmation.setContentText("Deletion CANNOT be undone.");
 
            confirmation.showAndWait().ifPresent(response ->
@@ -228,9 +240,10 @@ public class GUI extends Application
                        selectedMeasurement.addDefect(x1, x2, type);
 
                        defectList.getItems().clear();
-                       defectList.getItems().add(newDefect());
+                       defectList.getItems().addAll(selectedMeasurement.getDefects());
 
                        popUp.close();
+                       measurementList.refresh();
                    }
                    catch (NumberFormatException ex)
                    {
@@ -245,6 +258,34 @@ public class GUI extends Application
            popUp.show();
         });
 
+        deleteDefectButton.setOnAction(e ->
+        {
+            List<Defect> selectedDefects = defectList.getSelectionModel().getSelectedItems();
+            Measurement selectedMeasurement = measurementList.getSelectionModel().getSelectedItem();
+
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Confirm Deletion");
+            confirmation.setHeaderText("Are you sure you want to delete the selected defect(s)?");
+            confirmation.setContentText("Deletion CANNOT be undone.");
+
+            confirmation.showAndWait().ifPresent(response ->
+            {
+                if (response == ButtonType.OK)
+                {
+                    selectedMeasurement.getDefects().removeAll(selectedDefects);
+
+                    defectList.getItems().clear();
+                    defectList.getItems().addAll(selectedMeasurement.getDefects());
+
+                    measurementList.refresh();
+                    defectList.refresh();
+                }
+                else
+                {
+                    confirmation.close();
+                }
+            });
+        });
 
 
         root.setCenter(measurementBox);
