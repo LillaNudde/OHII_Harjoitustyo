@@ -7,21 +7,35 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class for "reading" a specific type of .CSV file and turning the contents into a list to be handled by the GUI
+ * @author LillaNudde
+ * @version 1.0
+ */
 public class CSVReader
 {
+    /**
+     * Reads and parses a .CSV file into a {@code Measurement} list
+     *
+     * @param filepath  the file path to the .CSV file
+     * @param separator the separator used in a .CSV file
+     * @return a {@code List} of {@code Measurement} objects parsed from the CSV
+     * @throws IllegalArgumentException if the .CSV file is "unreadable" by the program
+     */
     public static List<Measurement> readCSV(String filepath, String separator)
     {
+        // Constants for header column (measurement)
         final String ID_COL = "Name";
         final String DATE_COL = "Date";
         final String LENGTH_COL = "Length (cm)";
         final String WIDTH_COL = "Width (mm)";
         final String THICKNESS_COL = "Thickness (mm)";
-
+        // Constants for header column (defects)
         final String X1_COL = "X1";
         final String X2_COL = "X2";
         final String DefectType_COL = "DefectType";
 
+        // List to store parsed measurements
         List<Measurement> measurementList = new ArrayList<Measurement>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filepath)))
@@ -29,6 +43,7 @@ public class CSVReader
             String line = "";
             boolean headerLine = true;
 
+            // Column indexes for the .CSV file
             int nameColIdx = -1;
             int dateColIdx = -1;
             int lengthColIdx = -1;
@@ -38,13 +53,16 @@ public class CSVReader
             int x2ColIdx = -1;
             int defectTypeColIdx = -1;
 
+            // Read each line in the .CSV file
             while ((line = br.readLine()) != null)
             {
                 String[] values = line.split(separator);
 
+                // Determine column indexes from first line (header)
                 if (headerLine)
                 {
                     int colIdx = 0;
+                    // Assign indexes for columns by constant
                     for (String column : values)
                     {
                         if (column.equals(ID_COL))
@@ -83,6 +101,7 @@ public class CSVReader
                         colIdx++;
                     }
                 }
+                // Parse values for measurement entries
                 else
                 {
                     int currentId = -1;
@@ -101,6 +120,7 @@ public class CSVReader
                     double x2 = 0;
                     String defectType = "";
 
+                    // Assign values for fields based on index
                     for (String column : values)
                     {
                         if (colIdx == nameColIdx)
@@ -148,7 +168,15 @@ public class CSVReader
                                     x1found = false;
                                     x2found = false;
 
+                                    // Create defect and add to list
                                     Defect defect = new Defect(x1, x2, defectType);
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+                                    // TÄÄ PASKA BUGAA KORJAA SE
+
 
                                     defects.add(defect);
                                 }
@@ -157,23 +185,27 @@ public class CSVReader
 
                         colIdx++;
                     }
-
+                    // Create measurement object with data parsed from .CSV file
                     Measurement currentMeasurement = new Measurement(currentId, currentDate, currentLength, currentWidth, currentThickness);
                     currentMeasurement.addDefects(defects);
 
+                    // Add measurement to list
                     measurementList.add(currentMeasurement);
                 }
 
+                // No more header after first line
                 headerLine = false;
             }
         }
         catch (IOException e)
         {
+            // If error: Give alert
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An unexpected error has occurred.");
             alert.showAndWait();
         }
 
+        // Return list with measurements parsed from .CSV file
         return measurementList;
     }
 }
