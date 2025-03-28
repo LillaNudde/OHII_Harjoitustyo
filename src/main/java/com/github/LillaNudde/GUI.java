@@ -38,9 +38,9 @@ public class GUI extends Application
         int nextID = 0;
         for (Measurement measurement : measurementList.getItems())
         {
-            if (measurement.getID() > nextID)
+            if (measurement.getId() > nextID)
             {
-                nextID = measurement.getID();
+                nextID = measurement.getId();
             }
         }
         return (nextID + 1);
@@ -62,7 +62,6 @@ public class GUI extends Application
         measurementList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         defectList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        // Button action to open the file chooser
         importButton.setOnAction(e ->
         {
             File file = csvChooser.showOpenDialog(primaryStage);
@@ -145,7 +144,9 @@ public class GUI extends Application
                 }
                 catch (NumberFormatException ex)
                 {
-                   // Tyyliin joku erroriviestitähän
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("An unexpected error has occurred.");
+                    alert.showAndWait();
                 }
             });
 
@@ -196,7 +197,7 @@ public class GUI extends Application
                 {
                     for (Defect defect : measurement.getDefects())
                     {
-                        defectList.getItems().add(defect); // Adds defect as a string representation
+                        defectList.getItems().add(defect);
                     }
                 }
             }
@@ -210,11 +211,11 @@ public class GUI extends Application
            TextField typeField = new TextField();
            typeField.setPromptText("Defect Type");
 
-           TextField X1Field = new TextField();
-           X1Field.setPromptText("X1 (cm)");
+           TextField x1Field = new TextField();
+           x1Field.setPromptText("X1 (cm)");
 
-           TextField X2Field = new TextField();
-           X2Field.setPromptText("X2 (cm)");
+           TextField x2Field = new TextField();
+           x2Field.setPromptText("X2 (cm)");
 
            Button saveButton = new Button("Save");
 
@@ -245,8 +246,8 @@ public class GUI extends Application
                    try
                    {
                        String type = typeField.getText();
-                       double x1 = Double.parseDouble(X1Field.getText());
-                       double x2 = Double.parseDouble(X2Field.getText());
+                       double x1 = Double.parseDouble(x1Field.getText());
+                       double x2 = Double.parseDouble(x2Field.getText());
 
                        Defect newDefect = new Defect(x1, x2, type);
                        selectedMeasurement.addDefect(x1, x2, type);
@@ -259,11 +260,13 @@ public class GUI extends Application
                    }
                    catch (NumberFormatException ex)
                    {
-                       // Tähki joku errorrrerror varmaa
+                       Alert alert = new Alert(Alert.AlertType.ERROR);
+                       alert.setTitle("An unexpected error has occurred.");
+                       alert.showAndWait();
                    }
                });
            }
-           VBox inputBox = new VBox(10, typeField, X1Field, X2Field, saveButton);
+           VBox inputBox = new VBox(10, typeField, x1Field, x2Field, saveButton);
            inputBox.setAlignment(Pos.CENTER);
            Scene popUpScene = new Scene(inputBox, 300, 180);
            popUp.setScene(popUpScene);

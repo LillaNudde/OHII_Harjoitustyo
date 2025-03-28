@@ -1,5 +1,7 @@
 package com.github.LillaNudde;
 
+import javafx.scene.control.Alert;
+
 import java.io.*;
 import java.util.List;
 import java.io.PrintWriter;
@@ -25,7 +27,7 @@ public class CSVSaver
             {
                 StringBuilder row = new StringBuilder();
 
-                row.append(measurement.getID()).append(";")
+                row.append(measurement.getId()).append(";")
                         .append(measurement.getDate()).append(";")
                         .append(String.format("%.2f", measurement.getLength())).append(";")
                         .append(String.format("%.2f", measurement.getWidth())).append(";")
@@ -53,7 +55,9 @@ public class CSVSaver
         }
         catch (IOException e)
         {
-
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("An unexpected error has occurred.");
+            alert.showAndWait();
         }
     }
 }

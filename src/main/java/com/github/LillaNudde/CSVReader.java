@@ -1,5 +1,7 @@
 package com.github.LillaNudde;
 
+import javafx.scene.control.Alert;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,9 +14,9 @@ public class CSVReader
     {
         final String ID_COL = "Name";
         final String DATE_COL = "Date";
-        final String Length = "Length (cm)";
-        final String Width = "Width (mm)";
-        final String Thickness = "Thickness (mm)";
+        final String LENGTH_COL = "Length (cm)";
+        final String WIDTH_COL = "Width (mm)";
+        final String THICKNESS_COL = "Thickness (mm)";
 
         final String X1_COL = "X1";
         final String X2_COL = "X2";
@@ -53,15 +55,15 @@ public class CSVReader
                         {
                             dateColIdx = colIdx;
                         }
-                        else if (column.equals(Length))
+                        else if (column.equals(LENGTH_COL))
                         {
                             lengthColIdx = colIdx;
                         }
-                        else if (column.equals(Width))
+                        else if (column.equals(WIDTH_COL))
                         {
                             widthColIdx = colIdx;
                         }
-                        else if (column.equals(Thickness))
+                        else if (column.equals(THICKNESS_COL))
                         {
                             thicknessColIdx = colIdx;
                         }
@@ -123,7 +125,6 @@ public class CSVReader
                         }
                         else if (colIdx >= x1ColIdx)
                         {
-                            // No defects if string is empty
                             if (column == null || column.length() == 0)
                             {
                                 break;
@@ -168,7 +169,9 @@ public class CSVReader
         }
         catch (IOException e)
         {
-
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("An unexpected error has occurred.");
+            alert.showAndWait();
         }
 
         return measurementList;
