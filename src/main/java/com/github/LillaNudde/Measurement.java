@@ -22,7 +22,7 @@ public class Measurement
     }
 
     // List for defects
-    private ArrayList<Defect> DefectList = new ArrayList<Defect>();
+    private ArrayList<Defect> defectList = new ArrayList<Defect>();
 
 
     // Getters for fields
@@ -48,19 +48,19 @@ public class Measurement
     }
 
     // Setters for fields (excluding ID)
-    public void setDate()
+    public void setDate(String date)
     {
         this.date = date;
     }
-    public void setLength()
+    public void setLength(double length)
     {
         this.length = length;
     }
-    public void setWidth()
+    public void setWidth(double width)
     {
         this.width = width;
     }
-    public void setThickness()
+    public void setThickness(double thickness)
     {
         this.thickness = thickness;
     }
@@ -78,19 +78,19 @@ public class Measurement
     // Method to add defect to list
     public void addDefect(double X1, double X2, String defectType)
     {
-        DefectList.add(new Defect(X1, X2, defectType));
+        defectList.add(new Defect(X1, X2, defectType));
     }
 
     public List<Defect> getDefects()
     {
-        return DefectList;
+        return defectList;
     }
 
     // Get total amount of defects of a certain type
-    public int GetDefectAmount(String defectType)
+    public int getDefectAmount(String defectType)
     {
         int defectAmount = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             if (defect.getDefectType().equals(defectType))
             {
@@ -103,15 +103,15 @@ public class Measurement
     // Get total amount of all defects
     public int getDefectAmount()
     {
-        return DefectList.size();
+        return defectList.size();
     }
 
     // Get certain defect from list by index
     public Defect getDefect(int index)
     {
-        if (index < DefectList.size())
+        if (index < defectList.size())
         {
-            return DefectList.get(index);
+            return defectList.get(index);
         }
         else
         {
@@ -123,7 +123,7 @@ public class Measurement
     public double getTotalDefectLength(String defectType)
     {
         double totalDefectLength = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             if (defect.getDefectType().equals(defectType))
             {
@@ -137,7 +137,7 @@ public class Measurement
     public double getTotalDefectLength()
     {
         double totalDefectLength = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             totalDefectLength += defect.getDefectLength();
         }
@@ -145,10 +145,10 @@ public class Measurement
     }
 
     // Get total amount of end defects from certain type of defect
-    public int GetEndDefectAmount(String defectType)
+    public int getEndDefectAmount(String defectType)
     {
         int defectAmount = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             if (defect.getDefectType().equals(defectType) && ( defect.getX1() == 0 || defect.getX2() == getLength() ))
             {
@@ -159,10 +159,10 @@ public class Measurement
     }
 
     // Get total amount of all end defects
-    public int GetEndDefectAmount()
+    public int getEndDefectAmount()
     {
         int defectAmount = 0;
-        for (Defect defect : DefectList) {
+        for (Defect defect : defectList) {
             if (defect.getX1() == 0 || defect.getX2() == getLength())
             {
                 defectAmount++;
@@ -172,10 +172,10 @@ public class Measurement
     }
 
     // Get total length of end defects by certain defect type
-    public double GetEndDefectLength(String defectType)
+    public double getEndDefectLength(String defectType)
     {
         double defectLength = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             if (defect.getDefectType().equals(defectType) && ( defect.getX1() == 0 || defect.getX2() == getLength() ))
             {
@@ -186,10 +186,10 @@ public class Measurement
     }
 
     // Get total length of all end defects
-    public double GetEndDefectLength()
+    public double getEndDefectLength()
     {
         double defectLength = 0;
-        for (Defect defect : DefectList)
+        for (Defect defect : defectList)
         {
             if (defect.getX1() == 0 || defect.getX2() == getLength() )
             {
@@ -201,16 +201,16 @@ public class Measurement
 
     public void addDefects(ArrayList<Defect> defects)
     {
-        DefectList.addAll(defects);
+        defectList.addAll(defects);
     }
 
 
     // Remove defect from list by index
     public void removeDefect(int index)
     {
-        if (index < DefectList.size() && index >= 0)
+        if (index < defectList.size() && index >= 0)
         {
-            DefectList.remove(index);
+            defectList.remove(index);
         }
     }
 }

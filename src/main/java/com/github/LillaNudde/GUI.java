@@ -80,18 +80,30 @@ public class GUI extends Application
 
         exportButton.setOnAction(e ->
         {
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
-            // RAKENNA TÄÄ ROSKA
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save as .CSV");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(primaryStage);
+
+            if (file != null)
+            {
+                try
+                {
+                    CSVSaver.saveAsCSV(file.getAbsolutePath(), measurementList.getItems());
+                    Alert saved = new Alert(Alert.AlertType.INFORMATION);
+                    saved.setTitle("Export Successful");
+                    saved.setHeaderText("Measurement(s) exported successfully.");
+                    saved.showAndWait();
+                }
+                catch (Exception ex)
+                {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Export Failed");
+                    error.setHeaderText("An unexpected error occurred.");
+                    error.setContentText(ex.getMessage());
+                    error.showAndWait();
+                }
+            }
 
         });
 
