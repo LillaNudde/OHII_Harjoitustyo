@@ -18,7 +18,8 @@ import java.util.List;
  * @author LillaNudde
  * @version 1.0
  */
-public class GUI extends Application {
+public class GUI extends Application
+{
 
     // ListViews for displaying measurements and defects
     ListView<Measurement> measurementList = new ListView<>();
@@ -52,10 +53,13 @@ public class GUI extends Application {
      *
      * @return the next available ID for a new measurement
      */
-    private int getNextID() {
+    private int getNextID()
+    {
         int nextID = 0;
-        for (Measurement measurement : measurementList.getItems()) {
-            if (measurement.getId() > nextID) {
+        for (Measurement measurement : measurementList.getItems())
+        {
+            if (measurement.getId() > nextID)
+            {
                 nextID = measurement.getId();
             }
         }
@@ -69,7 +73,8 @@ public class GUI extends Application {
      * @param primaryStage the primary stage for the application
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)
+    {
         primaryStage.setTitle("GUI");
         BorderPane root = new BorderPane();
         root.setLeft(leftButtonBox);
@@ -80,7 +85,8 @@ public class GUI extends Application {
         defectList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // Functionality for the Import button
-        importButton.setOnAction(e -> {
+        importButton.setOnAction(e ->
+        {
             File file = csvChooser.showOpenDialog(primaryStage);
             if (file != null) {
                 System.out.println("File selected: " + file.getAbsolutePath());
@@ -93,13 +99,15 @@ public class GUI extends Application {
         });
 
         // Functionality for the Export button
-        exportButton.setOnAction(e -> {
+        exportButton.setOnAction(e ->
+        {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save as .CSV");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             File file = fileChooser.showSaveDialog(primaryStage);
 
-            if (file != null) {
+            if (file != null)
+            {
                 try {
                     CSVSaver.saveAsCSV(file.getAbsolutePath(), measurementList.getItems());
                     Alert saved = new Alert(Alert.AlertType.INFORMATION);
@@ -117,7 +125,8 @@ public class GUI extends Application {
         });
 
         // Functionality for the New Measurement button
-        newMeasurementButton.setOnAction(e -> {
+        newMeasurementButton.setOnAction(e ->
+        {
             Stage popUp = new Stage();
             popUp.setTitle("New Measurement");
 
@@ -136,7 +145,8 @@ public class GUI extends Application {
             thicknessField.setPromptText("Thickness (mm):");
 
             Button saveButton = new Button("Save");
-            saveButton.setOnAction(saveEvent -> {
+            saveButton.setOnAction(saveEvent ->
+            {
                 try {
                     String date = dateField.getText();
                     double length = Double.parseDouble(lengthField.getText());
@@ -148,7 +158,9 @@ public class GUI extends Application {
                     measurementList.getItems().add(newMeasurement);
 
                     popUp.close();
-                } catch (NumberFormatException ex) {
+                }
+                catch (NumberFormatException ex)
+                {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("An unexpected error has occurred.");
                     alert.showAndWait();
@@ -164,7 +176,8 @@ public class GUI extends Application {
         });
 
         // Functionality for the Delete Measurement button
-        deleteMeasurementButton.setOnAction(e -> {
+        deleteMeasurementButton.setOnAction(e ->
+        {
             List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
 
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
@@ -172,27 +185,36 @@ public class GUI extends Application {
             confirmation.setHeaderText("Are you sure you want to delete the selected measurement(s)?");
             confirmation.setContentText("Deletion CANNOT be undone.");
 
-            confirmation.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
+            confirmation.showAndWait().ifPresent(response ->
+            {
+                if (response == ButtonType.OK)
+                {
                     measurementList.getItems().removeAll(selectedMeasurements);
-                } else {
+                }
+                else
+                {
                     confirmation.close();
                 }
             });
         });
 
         // Update defect list when a measurement is selected
-        measurementList.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+        measurementList.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) ->
+        {
             defectList.getItems().clear();
 
             List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
 
-            if (selectedMeasurements.isEmpty()) {
+            if (selectedMeasurements.isEmpty())
+            {
                 return;
-            } else {
+            } else
+            {
                 defectList.getItems().clear();
-                for (Measurement measurement : selectedMeasurements) {
-                    for (Defect defect : measurement.getDefects()) {
+                for (Measurement measurement : selectedMeasurements)
+                {
+                    for (Defect defect : measurement.getDefects())
+                    {
                         defectList.getItems().add(defect);
                     }
                 }
@@ -200,7 +222,8 @@ public class GUI extends Application {
         });
 
         // Functionality for the New Defect button
-        newDefectButton.setOnAction(e -> {
+        newDefectButton.setOnAction(e ->
+        {
             Stage popUp = new Stage();
             popUp.setTitle("New Defect");
 
@@ -217,23 +240,30 @@ public class GUI extends Application {
 
             List<Measurement> selectedMeasurements = measurementList.getSelectionModel().getSelectedItems();
             Measurement selectedMeasurement = selectedMeasurements.get(0);
-            if (selectedMeasurements.isEmpty()) {
+            if (selectedMeasurements.isEmpty())
+            {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("No measurement selected");
                 alert.setHeaderText("You must select a measurement first.");
                 alert.setContentText(null);
                 alert.showAndWait();
                 return;
-            } else if (selectedMeasurements.size() > 1) {
+            }
+            else if (selectedMeasurements.size() > 1)
+            {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Multiple measurements selected");
                 alert.setHeaderText("Please select only a single measurement");
                 alert.setContentText(null);
                 alert.showAndWait();
                 return;
-            } else {
-                saveButton.setOnAction(saveEvent -> {
-                    try {
+            }
+            else
+            {
+                saveButton.setOnAction(saveEvent ->
+                {
+                    try
+                    {
                         String type = typeField.getText();
                         double x1 = Double.parseDouble(x1Field.getText());
                         double x2 = Double.parseDouble(x2Field.getText());
@@ -246,7 +276,8 @@ public class GUI extends Application {
 
                         popUp.close();
                         measurementList.refresh();
-                    } catch (NumberFormatException ex) {
+                    }
+                    catch (NumberFormatException ex) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("An unexpected error has occurred.");
                         alert.showAndWait();
@@ -261,7 +292,8 @@ public class GUI extends Application {
         });
 
         // Functionality for the Delete Defect button
-        deleteDefectButton.setOnAction(e -> {
+        deleteDefectButton.setOnAction(e ->
+        {
             List<Defect> selectedDefects = defectList.getSelectionModel().getSelectedItems();
             Measurement selectedMeasurement = measurementList.getSelectionModel().getSelectedItem();
 
@@ -270,7 +302,8 @@ public class GUI extends Application {
             confirmation.setHeaderText("Are you sure you want to delete the selected defect(s)?");
             confirmation.setContentText("Deletion CANNOT be undone.");
 
-            confirmation.showAndWait().ifPresent(response -> {
+            confirmation.showAndWait().ifPresent(response ->
+            {
                 if (response == ButtonType.OK) {
                     selectedMeasurement.getDefects().removeAll(selectedDefects);
 
@@ -279,7 +312,9 @@ public class GUI extends Application {
 
                     measurementList.refresh();
                     defectList.refresh();
-                } else {
+                }
+                else
+                {
                     confirmation.close();
                 }
             });

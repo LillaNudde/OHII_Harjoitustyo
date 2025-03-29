@@ -23,8 +23,10 @@ public class CSVSaver {
      * @param filePath The file path where the CSV should be saved.
      * @param measurements The list of {@code Measurement} objects to be saved.
      */
-    public static void saveAsCSV(String filePath, List<Measurement> measurements) {
-        try (PrintWriter writer = new PrintWriter(filePath)) {
+    public static void saveAsCSV(String filePath, List<Measurement> measurements)
+    {
+        try (PrintWriter writer = new PrintWriter(filePath))
+        {
             // Header for .CSV file
             writer.write("ID;Date;Length (cm);Width (mm);Thickness (mm)");
 
@@ -34,14 +36,16 @@ public class CSVSaver {
             int maxDefects = measurements.stream().mapToInt(m -> m.getDefects().size()).max().orElse(0);
 
             // Header columns for defect data
-            for (int i = 1; i <= maxDefects; i++) {
+            for (int i = 1; i <= maxDefects; i++)
+            {
                 writer.write(";Defect Type;X1;X2");
             }
 
             writer.write("\n");
 
             // Write each measurement into .CSV file
-            for (Measurement measurement : measurements) {
+            for (Measurement measurement : measurements)
+            {
                 StringBuilder row = new StringBuilder();
 
                 // Write measurement data into columns separated by ";"
@@ -55,7 +59,8 @@ public class CSVSaver {
                 List<Defect> defects = measurement.getDefects();
 
                 // Write defect data into columns separated by ";"
-                for (Defect defect : defects) {
+                for (Defect defect : defects)
+                {
                     row.append(";").append(defect.getDefectType())
                             .append(";").append(String.format("%.2f", defect.getX1()))
                             .append(";").append(String.format("%.2f", defect.getX2()));
@@ -63,7 +68,8 @@ public class CSVSaver {
 
                 // If a measurement has fewer defects than the one that has the most, some empty columns are created instead
                 int empty = (maxDefects - defects.size()) * 3;
-                for (int i = 0; i < empty; i++) {
+                for (int i = 0; i < empty; i++)
+                {
                     row.append(";");
                 }
 
@@ -72,7 +78,8 @@ public class CSVSaver {
                 writer.write("\n");
             }
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             // If error: Show alert
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("An unexpected error has occurred.");
