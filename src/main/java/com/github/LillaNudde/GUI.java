@@ -15,6 +15,7 @@ import java.util.List;
  * Extend the JavaFX {@link Application} abstract class in order to create the GUI.
  * The class uses {@link ListView} for displaying measurements and (when selected) their defects,
  * along with buttons to import/export a .CSV file, and to add/remove Measurements/Defects.
+ *
  * @author LillaNudde
  * @version 1.0
  */

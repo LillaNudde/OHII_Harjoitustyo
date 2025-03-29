@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * Class for creating Measurement objects as well as adding/removing/modifying their and their defects' data.
+ *
  * @author LillaNudde
  * @version 1.0 2025/03/31
+ *
  */
 public class Measurement
 {

@@ -13,7 +13,8 @@ import java.io.PrintWriter;
  * @author LillaNudde
  * @version 1.0
  */
-public class CSVSaver {
+public class CSVSaver
+{
 
     /**
      * Saves a list of {@code Measurement} objects to a CSV file.

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * Class for "reading" a specific type of .CSV file and turning the contents into a list to be handled by the GUI
+ *
  * @author LillaNudde
  * @version 1.0
  */
