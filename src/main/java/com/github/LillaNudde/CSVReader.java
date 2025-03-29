@@ -33,7 +33,7 @@ public class CSVReader
         // Constants for header column (defects)
         final String X1_COL = "X1";
         final String X2_COL = "X2";
-        final String DefectType_COL = "DefectType";
+        final String DEFECTTYPE_COL = "Defect Type";
 
         // List to store parsed measurements
         List<Measurement> measurementList = new ArrayList<Measurement>();
@@ -93,7 +93,7 @@ public class CSVReader
                         {
                             x2ColIdx = colIdx;
                         }
-                        else if (defectTypeColIdx < 0 && column.equals(DefectType_COL))
+                        else if (defectTypeColIdx < 0 && column.equals(DEFECTTYPE_COL))
                         {
                             defectTypeColIdx = colIdx;
                         }
@@ -145,9 +145,9 @@ public class CSVReader
                         }
                         else if (colIdx >= x1ColIdx)
                         {
-                            if (column == null || column.length() == 0)
+                            if (column == null || column.isEmpty())
                             {
-                                break;
+                                break; // No more defect data for this measurement
                             }
                             else
                             {
@@ -161,27 +161,33 @@ public class CSVReader
                                     x2 = Double.parseDouble(column);
                                     x2found = true;
                                 }
-                                else
-                                {
-                                    defectType = column;
 
+                                // If header doesn't contain defect type, hasDefectType = False
+                                boolean hasDefectType = (defectTypeColIdx != -1);
+
+                                if (x1found && x2found)
+                                {
+                                    // If defect type in header: set defect type from column
+                                    if (hasDefectType && colIdx + 1 < values.length)
+                                    {
+                                        defectType = values[++colIdx];
+                                    }
+                                    // If no defect type in header: defect type is not available
+                                    else
+                                    {
+                                        defectType = "N/A";
+                                    }
+
+                                    // Create and add defect
+                                    defects.add(new Defect(x1, x2, defectType));
+
+                                    // Reset for next defect
                                     x1found = false;
                                     x2found = false;
-
-                                    // Create defect and add to list
-                                    Defect defect = new Defect(x1, x2, defectType);
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-                                    // TÄÄ PASKA BUGAA KORJAA SE
-
-
-                                    defects.add(defect);
                                 }
                             }
                         }
+
 
                         colIdx++;
                     }
