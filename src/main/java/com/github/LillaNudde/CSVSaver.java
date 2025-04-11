@@ -11,7 +11,7 @@ import java.io.PrintWriter;
  * along with their defects and their data (defect type, x1, x2).
  *
  * @author LillaNudde
- * @version 1.0
+ * @version 1.1
  */
 public class CSVSaver
 {

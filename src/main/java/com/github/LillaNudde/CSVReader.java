@@ -11,7 +11,7 @@ import java.util.List;
  * Class for "reading" a specific type of .CSV file and turning the contents into a list to be handled by the GUI
  *
  * @author LillaNudde
- * @version 1.0
+ * @version 1.1
  */
 public class CSVReader
 {
@@ -27,6 +27,7 @@ public class CSVReader
     {
         // Constants for header column (measurement)
         final String ID_COL = "Name";
+        final String ALT_ID_COL = "ID";
         final String DATE_COL = "Date";
         final String LENGTH_COL = "Length (cm)";
         final String WIDTH_COL = "Width (mm)";
@@ -66,7 +67,7 @@ public class CSVReader
                     // Assign indexes for columns by constant
                     for (String column : values)
                     {
-                        if (column.equals(ID_COL))
+                        if (column.equals(ID_COL) | column.equals(ALT_ID_COL))
                         {
                             nameColIdx = colIdx;
                         }
@@ -134,34 +135,39 @@ public class CSVReader
                         }
                         else if (colIdx == lengthColIdx)
                         {
-                            currentLength = Double.parseDouble(column);
+                            currentLength = Double.parseDouble(column.replace(",", "."));
                         }
                         else if (colIdx == widthColIdx)
                         {
-                            currentWidth = Double.parseDouble(column);
+                            currentWidth = Double.parseDouble(column.replace(",", "."));
                         }
                         else if (colIdx == thicknessColIdx)
                         {
-                            currentThickness = Double.parseDouble(column);
+                            currentThickness = Double.parseDouble(column.replace(",", "."));
                         }
                         else if (colIdx >= x1ColIdx)
                         {
                             if (column == null || column.isEmpty())
                             {
-                                break; // No more defect data for this measurement
+                                // No more defect data for this measurement
+                                break;
                             }
                             else
                             {
-                                if (!x1found)
-                                {
-                                    x1 = Double.parseDouble(column);
-                                    x1found = true;
+                                try {
+                                    if (!x1found) {
+                                        x1 = Double.parseDouble(column.replace(",", "."));
+                                        x1found = true;
+                                    }
+                                    else if (!x2found) {
+                                        x2 = Double.parseDouble(column.replace(",", "."));
+                                        x2found = true;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Assume this column is defect type
+                                    defectType = column;
                                 }
-                                else if (!x2found)
-                                {
-                                    x2 = Double.parseDouble(column);
-                                    x2found = true;
-                                }
+
 
                                 // If header doesn't contain defect type, hasDefectType = False
                                 boolean hasDefectType = (defectTypeColIdx != -1);

@@ -17,7 +17,7 @@ import java.util.List;
  * along with buttons to import/export a .CSV file, and to add/remove Measurements/Defects.
  *
  * @author LillaNudde
- * @version 1.0
+ * @version 1.1
  */
 public class GUI extends Application
 {
